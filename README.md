@@ -43,6 +43,3 @@ The sandbox path is designed to keep host resource usage bounded: render contain
 
 To add new few-shot patterns, open `prompts/examples.py`, add a new `Example(prompt=..., code=...)` entry, keep the code compatible with Manim Community, and prefer short scenes that demonstrate a reusable animation pattern rather than a one-off visual flourish. New examples should preserve the `GeneratedScene(Scene)` class contract because the sandbox runner invokes that class name directly.
 
-## License
-
-MIT
