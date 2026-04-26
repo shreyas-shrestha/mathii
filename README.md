@@ -1,10 +1,10 @@
-# Text-to-Manim
+# 
 
-Text-to-Manim is an open-source agentic pipeline that turns a natural-language explanation request into a rendered Manim animation. It uses an LLM to generate Manim Community code, runs that code inside an isolated Docker sandbox with no network access, retries with a targeted correction loop when rendering fails, and returns an `.mp4` you can watch in the browser. For local testing, it can also generate code through a host-running Ollama instance instead of a cloud API.
+Mathii is an open-source agentic pipeline that turns a natural-language explanation request into a rendered Manim animation. It uses an LLM to generate Manim Community code, runs that code inside an isolated Docker sandbox with no network access, retries with a targeted correction loop when rendering fails, and returns an `.mp4` you can watch in the browser. For local testing, it can also generate code through a host-running Ollama instance instead of a cloud API.
 
 ## Quickstart
 
-1. Clone this repository and `cd` into `text-to-manim`.
+1. Clone this repository and `cd` into `Mathii`.
 2. Copy `.env.example` to `.env`.
 3. Add one provider API key to `.env`.
 4. Run `docker compose up`.
