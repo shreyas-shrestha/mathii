@@ -1,0 +1,55 @@
+services:
+  api:
+    image: python:3.11-slim
+    working_dir: /app
+    ports:
+      - "8000:8000"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ./:/app
+      - ./sandbox/volumes:/app/sandbox/volumes
+      - /Users/shreyasshrestha/.colima/default:/colima
+    tmpfs:
+      - /tmp:size=256m
+    env_file:
+      - .env
+    environment:
+      DOCKER_HOST: unix:///colima/docker.sock
+    depends_on: []
+    command: >
+      sh -c "apt-get update
+      && apt-get install -y --no-install-recommends docker.io docker-cli
+      && rm -rf /var/lib/apt/lists/*
+      && pip install --no-cache-dir
+      fastapi
+      uvicorn[standard]
+      pydantic
+      pydantic-settings
+      anthropic
+      openai
+      google-generativeai
+      pytest
+      pytest-asyncio
+      httpx
+      && uvicorn main:app --host 0.0.0.0 --port 8000 --reload"
+
+  sandbox-builder:
+    build:
+      context: ./sandbox
+      dockerfile: Dockerfile
+    image: text-to-manim-sandbox
+    profiles: ["build"]
+
+  ollama:
+    image: ollama/ollama:latest
+    profiles: ["local-llm"]
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    tmpfs:
+      - /tmp:size=512m
+
+volumes:
+  ollama_data:

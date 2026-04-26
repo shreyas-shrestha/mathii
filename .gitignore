@@ -1,0 +1,6 @@
+__pycache__/
+.pytest_cache/
+.env
+.venv/
+sandbox/volumes/*
+!sandbox/volumes/.gitkeep
