@@ -1,6 +1,6 @@
 # Mathii
 
-Mathii is an open-source agentic pipeline that turns a natural-language explanation request into a rendered Manim animation. It uses an LLM to generate Manim Community code, runs that code inside an isolated Docker sandbox with no network access, retries with a targeted correction loop when rendering fails, and returns an `.mp4` you can watch in the browser. For local testing, it can also generate code through a host-running Ollama instance instead of a cloud API.
+Mathii is an open-source agentic pipeline that turns a natural-language explanation request into a rendered Manim animation. It first plans a structured scene spec for supported math concepts, compiles those specs into deterministic Manim scenes when possible, falls back to LLM code generation for open-ended prompts, runs the result inside an isolated Docker sandbox with no network access, retries with a targeted correction loop when rendering fails, and returns an `.mp4` you can watch in the browser. For local testing, it can also generate code through a host-running Ollama instance instead of a cloud API.
 
 ## Quickstart
 
@@ -13,15 +13,19 @@ Mathii is an open-source agentic pipeline that turns a natural-language explanat
 
 ```mermaid
 flowchart LR
-    A["Prompt from UI or API"] --> B["LLM Generator"]
-    B --> C["Generated Manim Code"]
-    C --> D["Docker Sandbox Runner"]
-    D --> E{"Render succeeds?"}
-    E -- Yes --> F["MP4 stored in sandbox volume"]
-    E -- No --> G["Correction Prompt with stderr"]
-    G --> H["LLM Corrector"]
-    H --> D
-    F --> I["FastAPI serves video and code"]
+    A["Prompt from UI or API"] --> B["Scene Planner"]
+    B --> C{"Template-supported concept?"}
+    C -- Yes --> D["Deterministic Scene Compiler"]
+    C -- No --> E["LLM Generator"]
+    D --> F["Generated Manim Code"]
+    E --> F
+    F --> G["Docker Sandbox Runner"]
+    G --> H{"Render succeeds?"}
+    H -- Yes --> I["MP4 stored in sandbox volume"]
+    H -- No --> J["Correction Prompt with stderr"]
+    J --> K["LLM Corrector"]
+    K --> G
+    I --> L["FastAPI serves video and code"]
 ```
 
 ## Supported LLM Providers
@@ -42,4 +46,3 @@ The sandbox path is designed to keep host resource usage bounded: render contain
 ## Contributing
 
 To add new few-shot patterns, open `prompts/examples.py`, add a new `Example(prompt=..., code=...)` entry, keep the code compatible with Manim Community, and prefer short scenes that demonstrate a reusable animation pattern rather than a one-off visual flourish. New examples should preserve the `GeneratedScene(Scene)` class contract because the sandbox runner invokes that class name directly.
-

@@ -147,6 +147,10 @@ async def get_video(job_id: str, background_tasks: BackgroundTasks) -> FileRespo
     if not mp4_files:
         raise HTTPException(status_code=404, detail="Video not found")
 
-    background_tasks.add_task(remove_job_dir, job_dir)
+    background_tasks.add_task(
+        _cleanup_job_later,
+        job_id,
+        min(get_settings().job_retention_seconds, 600),
+    )
     JOB_STORE.pop(job_id, None)
     return FileResponse(path=mp4_files[0], media_type="video/mp4", filename=f"{job_id}.mp4")
