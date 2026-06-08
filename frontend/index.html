@@ -6,27 +6,39 @@
   <title>Mathii</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" />
   <style>
     :root {
-      --bg: #f5f5f3;
-      --bg-elevated: rgba(255, 255, 255, 0.88);
-      --panel: #ffffff;
-      --panel-muted: #f2f2ef;
-      --text: #171717;
-      --text-muted: #6a6a66;
-      --border: rgba(23, 23, 23, 0.08);
-      --border-strong: rgba(23, 23, 23, 0.14);
-      --accent: #111111;
-      --accent-soft: rgba(17, 17, 17, 0.07);
-      --success: #177245;
-      --danger: #be3f35;
-      --danger-soft: rgba(190, 63, 53, 0.08);
-      --shadow: 0 18px 40px rgba(15, 15, 15, 0.08);
-      --radius-lg: 28px;
-      --radius-md: 20px;
-      --radius-sm: 14px;
+      color-scheme: light;
+      --bg: #ffffff;
+      --bg-secondary: #f4f4f4;
+      --sidebar-bg: #171717;
+      --sidebar-text: #ececec;
+      --sidebar-muted: #8e8ea0;
+      --text-primary: #0d0d0d;
+      --text-secondary: #6e6e80;
+      --border: rgba(0, 0, 0, 0.08);
+      --user-bubble: #f4f4f4;
+      --accent: #10a37f;
+      --accent-fg: #ffffff;
+      --danger: #ef4444;
+      --mono: "JetBrains Mono", monospace;
+      --sans: "Inter", system-ui, sans-serif;
+      --shadow: 0 18px 40px rgba(0, 0, 0, 0.08);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        color-scheme: dark;
+        --bg: #212121;
+        --bg-secondary: #2f2f2f;
+        --text-primary: #ececec;
+        --text-secondary: #8e8ea0;
+        --border: rgba(255, 255, 255, 0.08);
+        --user-bubble: #2f2f2f;
+        --shadow: 0 18px 40px rgba(0, 0, 0, 0.28);
+      }
     }
 
     * {
@@ -35,401 +47,359 @@
 
     html, body {
       margin: 0;
-      min-height: 100%;
+      height: 100%;
     }
 
     body {
-      font-family: "DM Sans", sans-serif;
-      color: var(--text);
-      background:
-        radial-gradient(circle at top center, rgba(0, 0, 0, 0.035), transparent 26%),
-        linear-gradient(180deg, #f7f7f4 0%, #efefeb 100%);
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--text-primary);
     }
 
     button,
-    select,
-    textarea {
-      font: inherit;
-    }
-
-    button,
+    textarea,
     select {
-      appearance: none;
-      border: 1px solid var(--border);
-      background: var(--panel);
-      color: var(--text);
+      font: inherit;
     }
 
     button {
       cursor: pointer;
     }
 
-    button:disabled {
-      cursor: wait;
-      opacity: 0.6;
+    .app-shell {
+      display: grid;
+      grid-template-columns: 260px minmax(0, 1fr);
+      min-height: 100vh;
+      background: var(--bg);
     }
 
-    .app-shell {
-      min-height: 100vh;
-      width: min(1120px, calc(100vw - 32px));
-      margin: 0 auto;
-      padding: 20px 0 32px;
+    .sidebar {
       display: flex;
       flex-direction: column;
-      gap: 24px;
-    }
-
-    .topbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
+      gap: 18px;
+      padding: 18px 14px 14px;
+      background: var(--sidebar-bg);
+      color: var(--sidebar-text);
+      border-right: 1px solid rgba(255, 255, 255, 0.06);
     }
 
     .brand {
-      display: inline-flex;
+      display: flex;
       align-items: center;
       gap: 10px;
-      font-size: 1.1rem;
-      font-weight: 700;
+      padding: 4px 6px;
+      font-size: 1rem;
+      font-weight: 600;
       letter-spacing: -0.02em;
     }
 
     .brand-mark {
-      width: 34px;
-      height: 34px;
-      border-radius: 12px;
-      background: var(--accent);
-      color: #fff;
+      width: 30px;
+      height: 30px;
+      border-radius: 10px;
       display: grid;
       place-items: center;
-      font-family: "JetBrains Mono", monospace;
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--sidebar-text);
+      font-family: var(--mono);
       font-size: 0.95rem;
+      font-weight: 500;
     }
 
-    .topbar-controls {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-      justify-content: flex-end;
+    .sidebar-button {
+      width: 100%;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--sidebar-text);
+      padding: 11px 14px;
+      text-align: left;
+      font-size: 0.95rem;
+      transition: background 140ms ease, border-color 140ms ease;
     }
 
-    .selector {
-      min-width: 140px;
-      padding: 10px 38px 10px 14px;
-      border-radius: 999px;
+    .sidebar-button:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.14);
+    }
+
+    .history {
+      display: grid;
+      gap: 6px;
+      align-content: start;
+      min-height: 0;
+      overflow: auto;
+      padding-right: 2px;
+    }
+
+    .history-item {
+      display: grid;
+      gap: 3px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      color: var(--sidebar-text);
+      background: transparent;
+      border: 1px solid transparent;
+    }
+
+    .history-item:hover {
+      background: rgba(255, 255, 255, 0.04);
+      border-color: rgba(255, 255, 255, 0.04);
+    }
+
+    .history-title {
+      font-size: 0.9rem;
+      line-height: 1.35;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .history-meta {
+      font-size: 0.76rem;
+      color: var(--sidebar-muted);
+      line-height: 1.2;
+    }
+
+    .sidebar-footer {
+      margin-top: auto;
+      display: grid;
+      gap: 12px;
+      padding-top: 8px;
+    }
+
+    .selector-group {
+      display: grid;
+      gap: 6px;
+    }
+
+    .selector-label {
+      font-size: 0.75rem;
+      color: var(--sidebar-muted);
+      letter-spacing: 0.01em;
+    }
+
+    .sidebar-select {
+      width: 100%;
+      appearance: none;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
       background:
-        linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(244, 244, 241, 0.92));
+        linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.03));
+      color: var(--sidebar-text);
+      padding: 11px 36px 11px 12px;
       background-image:
-        linear-gradient(45deg, transparent 50%, var(--text-muted) 50%),
-        linear-gradient(135deg, var(--text-muted) 50%, transparent 50%);
+        linear-gradient(45deg, transparent 50%, var(--sidebar-muted) 50%),
+        linear-gradient(135deg, var(--sidebar-muted) 50%, transparent 50%);
       background-position:
         calc(100% - 18px) calc(50% - 2px),
         calc(100% - 13px) calc(50% - 2px);
       background-size: 5px 5px, 5px 5px;
       background-repeat: no-repeat;
-      color: var(--text);
     }
 
-    .view {
-      flex: 1;
-      display: none;
+    .provider-hint {
+      font-size: 0.75rem;
+      color: var(--sidebar-muted);
+      min-height: 1em;
     }
 
-    .view.active {
+    .main {
+      min-width: 0;
+      background: var(--bg);
+    }
+
+    .main-shell {
+      max-width: 720px;
+      margin: 0 auto;
+      min-height: 100vh;
       display: flex;
-    }
-
-    .landing {
-      align-items: center;
-      justify-content: center;
-      padding: 4vh 0 9vh;
-    }
-
-    .landing-inner {
-      width: min(860px, 100%);
-      display: grid;
-      gap: 28px;
-    }
-
-    .hero-mark {
-      display: grid;
-      gap: 18px;
-      justify-items: center;
-      text-align: center;
-    }
-
-    .hero-logo {
-      width: 72px;
-      height: 72px;
-      border-radius: 24px;
-      background: linear-gradient(180deg, #1f1f1f, #090909);
-      color: #ffffff;
-      display: grid;
-      place-items: center;
-      font-size: 1.6rem;
-      font-weight: 700;
-      letter-spacing: -0.05em;
-      box-shadow: 0 16px 36px rgba(17, 17, 17, 0.16);
-    }
-
-    .hero-title {
-      margin: 0;
-      font-size: clamp(2.5rem, 7vw, 4.6rem);
-      line-height: 0.96;
-      letter-spacing: -0.05em;
-    }
-
-    .composer {
-      background: var(--bg-elevated);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(18px);
-      padding: 16px;
-      display: grid;
-      gap: 14px;
-    }
-
-    .composer-textarea {
-      width: 100%;
-      min-height: 146px;
-      resize: none;
-      border: 0;
-      outline: none;
-      padding: 10px 8px 4px;
-      background: transparent;
-      color: var(--text);
-      font-size: 1.08rem;
-      line-height: 1.6;
-    }
-
-    .composer-textarea::placeholder {
-      color: #868680;
-    }
-
-    .composer-footer {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .composer-actions {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .submit-btn {
-      min-width: 106px;
-      border: 0;
-      border-radius: 999px;
-      padding: 11px 18px;
-      background: var(--accent);
-      color: #fff;
-      font-weight: 600;
-      letter-spacing: -0.01em;
-      box-shadow: 0 10px 24px rgba(17, 17, 17, 0.12);
-    }
-
-    .result-view {
       flex-direction: column;
-      gap: 18px;
-      padding-top: 6px;
+      padding: 0 20px;
+    }
+
+    .thread-wrap {
+      flex: 1;
+      min-height: 0;
+      overflow: auto;
+      padding: 36px 0 180px;
+      scroll-behavior: smooth;
     }
 
     .thread {
       display: grid;
-      gap: 18px;
+      gap: 20px;
+    }
+
+    .thread-empty {
+      min-height: calc(100vh - 280px);
+      display: grid;
+      place-items: center;
+      color: var(--text-secondary);
+      font-size: 0.98rem;
     }
 
     .message-row {
       display: flex;
-      gap: 14px;
-      align-items: flex-start;
+      width: 100%;
     }
 
-    .avatar {
-      width: 36px;
-      height: 36px;
-      flex: 0 0 36px;
-      border-radius: 12px;
-      display: grid;
-      place-items: center;
-      font-size: 0.95rem;
-      font-weight: 700;
-      background: var(--panel-muted);
-      color: var(--text);
-      border: 1px solid var(--border);
+    .message-row.user {
+      justify-content: flex-end;
     }
 
-    .avatar.brand-avatar {
-      background: var(--accent);
-      color: #fff;
-      border-color: rgba(17, 17, 17, 0.18);
+    .message-row.assistant {
+      justify-content: flex-start;
     }
 
-    .bubble {
-      flex: 1;
-      min-width: 0;
-      background: var(--bg-elevated);
-      border: 1px solid var(--border);
-      border-radius: 24px;
-      box-shadow: var(--shadow);
-      padding: 18px 18px 16px;
-    }
-
-    .bubble.user {
-      background: var(--panel);
-    }
-
-    .prompt-text {
-      margin: 0;
-      color: var(--text);
-      font-size: 1rem;
+    .user-bubble {
+      max-width: min(88%, 640px);
+      border-radius: 22px;
+      background: var(--user-bubble);
+      color: var(--text-primary);
+      padding: 14px 16px;
       line-height: 1.6;
       white-space: pre-wrap;
       word-break: break-word;
+      border: 1px solid var(--border);
     }
 
-    .result-header {
+    .assistant-shell {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
+      align-items: flex-start;
       gap: 12px;
-      flex-wrap: wrap;
-      margin-bottom: 14px;
+      width: 100%;
+      max-width: 100%;
     }
 
-    .result-title {
-      margin: 0;
-      font-size: 1rem;
-      font-weight: 700;
-      letter-spacing: -0.02em;
+    .assistant-avatar {
+      width: 28px;
+      height: 28px;
+      flex: 0 0 28px;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      background: var(--sidebar-bg);
+      color: var(--sidebar-text);
+      font-family: var(--mono);
+      font-size: 0.82rem;
+      font-weight: 500;
+      margin-top: 2px;
     }
 
-    .status-pill {
+    .assistant-bubble {
+      min-width: 0;
+      flex: 1;
+      padding-top: 1px;
+    }
+
+    .status-line {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 8px 12px;
-      border-radius: 999px;
-      background: var(--accent-soft);
-      border: 1px solid rgba(17, 17, 17, 0.08);
-      color: var(--text);
-      font-size: 0.88rem;
-      font-weight: 600;
+      color: var(--text-primary);
+      font-size: 0.96rem;
+      font-weight: 500;
+      min-height: 24px;
     }
 
-    .status-pill.failed {
-      background: var(--danger-soft);
-      border-color: rgba(190, 63, 53, 0.18);
-      color: var(--danger);
-    }
-
-    .status-pill.done {
-      background: rgba(23, 114, 69, 0.08);
-      border-color: rgba(23, 114, 69, 0.14);
-      color: var(--success);
-    }
-
-    .pulse {
+    .status-pulse {
       display: inline-flex;
-      gap: 4px;
       align-items: center;
+      gap: 4px;
+      color: var(--accent);
     }
 
-    .pulse span {
+    .status-pulse span {
       width: 5px;
       height: 5px;
       border-radius: 999px;
       background: currentColor;
-      animation: pulse 1s infinite ease-in-out;
+      animation: bounce 1s infinite ease-in-out;
     }
 
-    .pulse span:nth-child(2) { animation-delay: 0.12s; }
-    .pulse span:nth-child(3) { animation-delay: 0.24s; }
+    .status-pulse span:nth-child(2) {
+      animation-delay: 0.12s;
+    }
 
-    .meta-strip {
+    .status-pulse span:nth-child(3) {
+      animation-delay: 0.24s;
+    }
+
+    .meta-row {
       display: flex;
-      gap: 10px;
       flex-wrap: wrap;
-      margin-bottom: 16px;
+      gap: 8px;
+      margin-top: 10px;
     }
 
     .meta-chip {
       border-radius: 999px;
       border: 1px solid var(--border);
-      background: var(--panel-muted);
-      color: var(--text-muted);
-      padding: 8px 12px;
-      font-size: 0.86rem;
-      font-family: "JetBrains Mono", monospace;
+      background: var(--bg-secondary);
+      color: var(--text-secondary);
+      padding: 6px 10px;
+      font-family: var(--mono);
+      font-size: 0.74rem;
+      line-height: 1;
     }
 
-    .preview-stage {
-      border-radius: 22px;
-      border: 1px solid var(--border);
-      background: #111;
+    .preview-card {
+      margin-top: 16px;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border-radius: 18px;
       overflow: hidden;
-      min-height: 280px;
+      border: 1px solid var(--border);
+      background: var(--bg-secondary);
       display: grid;
       place-items: center;
     }
 
-    .preview-stage.empty {
-      background:
-        linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0)),
-        #191919;
-      color: rgba(255, 255, 255, 0.68);
-      font-family: "JetBrains Mono", monospace;
-      font-size: 0.9rem;
-      text-align: center;
-      padding: 24px;
+    .preview-card.placeholder {
+      color: var(--text-secondary);
+      font-size: 0.92rem;
     }
 
-    video {
+    .preview-card video {
       display: block;
       width: 100%;
+      height: 100%;
+      object-fit: cover;
       background: #000;
     }
 
-    .error-banner {
+    .inline-error {
       display: none;
-      margin-top: 16px;
-      padding: 14px 16px;
-      border-radius: 18px;
-      border: 1px solid rgba(190, 63, 53, 0.18);
-      background: var(--danger-soft);
+      margin-top: 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(239, 68, 68, 0.25);
+      background: rgba(239, 68, 68, 0.08);
       color: var(--danger);
+      padding: 12px 14px;
+      line-height: 1.55;
       white-space: pre-wrap;
-      font-family: "JetBrains Mono", monospace;
-      font-size: 0.88rem;
-      line-height: 1.6;
+      font-family: var(--mono);
+      font-size: 0.82rem;
     }
 
-    .details-stack {
-      display: grid;
-      gap: 12px;
-      margin-top: 16px;
+    .assistant-details {
+      margin-top: 14px;
     }
 
     details {
       border: 1px solid var(--border);
-      border-radius: 18px;
-      background: var(--panel);
+      border-radius: 16px;
       overflow: hidden;
+      background: var(--bg-secondary);
     }
 
     summary {
       cursor: pointer;
       list-style: none;
-      padding: 14px 16px;
-      font-weight: 600;
+      padding: 13px 14px;
+      font-size: 0.9rem;
+      font-weight: 500;
     }
 
     summary::-webkit-details-marker {
@@ -438,186 +408,250 @@
 
     pre {
       margin: 0;
-      padding: 0 16px 16px;
+      padding: 0 14px 14px;
       overflow: auto;
-      font-family: "JetBrains Mono", monospace;
-      font-size: 0.9rem;
+      font-family: var(--mono);
+      font-size: 0.84rem;
       line-height: 1.6;
     }
 
     code {
-      font-family: "JetBrains Mono", monospace;
+      font-family: var(--mono);
     }
 
-    .result-composer {
-      margin-top: auto;
+    .composer-wrap {
       position: sticky;
       bottom: 0;
-      padding-top: 6px;
-      background: linear-gradient(180deg, rgba(245,245,243,0), rgba(245,245,243,0.92) 28%, rgba(245,245,243,1));
+      padding: 18px 0 24px;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, var(--bg) 36%);
     }
 
-    .assistive-row {
+    @media (prefers-color-scheme: dark) {
+      .composer-wrap {
+        background:
+          linear-gradient(180deg, rgba(33, 33, 33, 0) 0%, var(--bg) 36%);
+      }
+    }
+
+    .composer {
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      background: var(--bg);
+      box-shadow: var(--shadow);
+      padding: 12px 12px 12px 16px;
+    }
+
+    .composer-inner {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
+      align-items: flex-end;
       gap: 12px;
-      color: var(--text-muted);
-      font-size: 0.88rem;
-      min-height: 20px;
+    }
+
+    .composer-input {
+      width: 100%;
+      min-height: 24px;
+      max-height: 200px;
+      resize: none;
+      overflow-y: auto;
+      border: 0;
+      outline: 0;
+      background: transparent;
+      color: var(--text-primary);
+      line-height: 1.55;
+      padding: 6px 0;
+      font-size: 1rem;
+    }
+
+    .composer-input::placeholder {
+      color: var(--text-secondary);
+    }
+
+    .send-btn {
+      width: 42px;
+      height: 42px;
+      flex: 0 0 42px;
+      border-radius: 999px;
+      border: 0;
+      display: grid;
+      place-items: center;
+      background: var(--sidebar-bg);
+      color: var(--accent-fg);
+      transition: opacity 140ms ease, transform 140ms ease;
+    }
+
+    .send-btn:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+
+    .send-btn svg {
+      width: 18px;
+      height: 18px;
+      display: block;
+    }
+
+    .send-btn .spinner {
+      display: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 999px;
+      border: 2px solid rgba(255, 255, 255, 0.25);
+      border-top-color: var(--accent-fg);
+      animation: spin 0.75s linear infinite;
+    }
+
+    .send-btn.loading .send-icon {
+      display: none;
+    }
+
+    .send-btn.loading .spinner {
+      display: block;
     }
 
     .hidden {
       display: none !important;
     }
 
-    @keyframes pulse {
-      0%, 80%, 100% { transform: translateY(0); opacity: 0.35; }
-      40% { transform: translateY(-3px); opacity: 1; }
+    @keyframes bounce {
+      0%, 80%, 100% {
+        transform: translateY(0);
+        opacity: 0.35;
+      }
+      40% {
+        transform: translateY(-4px);
+        opacity: 1;
+      }
     }
 
-    @media (max-width: 768px) {
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    @media (max-width: 880px) {
       .app-shell {
-        width: min(100vw - 20px, 100%);
-        padding: 14px 0 24px;
-        gap: 18px;
+        grid-template-columns: 1fr;
       }
 
-      .topbar {
-        align-items: flex-start;
-        flex-direction: column;
+      .sidebar {
+        gap: 14px;
+        border-right: 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
       }
 
-      .topbar-controls,
-      .composer-footer,
-      .composer-actions {
-        width: 100%;
+      .history {
+        grid-auto-flow: column;
+        grid-auto-columns: minmax(180px, 1fr);
+        overflow-x: auto;
+        overflow-y: hidden;
       }
 
-      .selector,
-      .submit-btn {
-        flex: 1 1 0;
-        min-width: 0;
+      .sidebar-footer {
+        grid-template-columns: 1fr 1fr;
+        align-items: end;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .main-shell {
+        padding: 0 14px;
       }
 
-      .hero-logo {
-        width: 64px;
-        height: 64px;
-        border-radius: 22px;
+      .thread-wrap {
+        padding-top: 20px;
+        padding-bottom: 168px;
       }
 
-      .bubble {
-        padding: 16px;
+      .sidebar-footer {
+        grid-template-columns: 1fr;
+      }
+
+      .composer {
         border-radius: 20px;
       }
 
-      .preview-stage {
-        min-height: 220px;
+      .user-bubble {
+        max-width: 94%;
       }
     }
   </style>
 </head>
 <body>
   <div class="app-shell">
-    <header class="topbar">
+    <aside class="sidebar">
       <div class="brand">
         <div class="brand-mark">M</div>
         <span>Mathii</span>
       </div>
-      <div class="topbar-controls">
-        <select id="provider" class="selector" aria-label="Model selector"></select>
-        <select id="quality" class="selector" aria-label="Reasoning quality selector">
-          <option value="l">Fast</option>
-          <option value="m">Balanced</option>
-          <option value="h">Deep</option>
-        </select>
+
+      <button id="newAnimationBtn" class="sidebar-button" type="button">New animation</button>
+
+      <div class="history" aria-label="Example prompts">
+        <div class="history-item">
+          <div class="history-title">Animate the derivative of x^2</div>
+          <div class="history-meta">Derivative</div>
+        </div>
+        <div class="history-item">
+          <div class="history-title">Show how the quadratic formula works</div>
+          <div class="history-meta">Algebra</div>
+        </div>
+        <div class="history-item">
+          <div class="history-title">Visualize a sine wave transformation</div>
+          <div class="history-meta">Trigonometry</div>
+        </div>
+        <div class="history-item">
+          <div class="history-title">Explain matrix multiplication step by step</div>
+          <div class="history-meta">Linear algebra</div>
+        </div>
       </div>
-    </header>
 
-    <main id="landingView" class="view landing active">
-      <div class="landing-inner">
-        <div class="hero-mark">
-          <div class="hero-logo">M</div>
-          <h1 class="hero-title">Mathii</h1>
+      <div class="sidebar-footer">
+        <div class="selector-group">
+          <label class="selector-label" for="provider">Model</label>
+          <select id="provider" class="sidebar-select"></select>
+          <div id="providerHint" class="provider-hint">Loading models…</div>
         </div>
 
-        <section class="composer" aria-label="Prompt composer">
-          <textarea
-            id="prompt"
-            class="composer-textarea"
-            placeholder="Animate the derivative of x^2"
-          ></textarea>
-          <div class="composer-footer">
-            <div id="providerHint" class="assistive-row">Loading models…</div>
-            <div class="composer-actions">
-              <button id="generateBtn" class="submit-btn">Generate</button>
-            </div>
-          </div>
-        </section>
+        <div class="selector-group">
+          <label class="selector-label" for="quality">Reasoning</label>
+          <select id="quality" class="sidebar-select">
+            <option value="l">Fast</option>
+            <option value="m">Balanced</option>
+            <option value="h">Deep</option>
+          </select>
+        </div>
       </div>
-    </main>
+    </aside>
 
-    <main id="resultView" class="view result-view">
-      <section class="thread">
-        <div class="message-row">
-          <div class="avatar">You</div>
-          <div class="bubble user">
-            <p id="resultPrompt" class="prompt-text"></p>
-          </div>
+    <main class="main">
+      <div class="main-shell">
+        <div class="thread-wrap" id="threadWrap">
+          <div class="thread" id="thread"></div>
+          <div class="thread-empty" id="threadEmpty">Mathii</div>
         </div>
 
-        <div class="message-row">
-          <div class="avatar brand-avatar">M</div>
-          <div class="bubble">
-            <div class="result-header">
-              <h2 class="result-title">Mathii</h2>
-              <div id="statusPill" class="status-pill">
-                <div class="pulse" aria-hidden="true">
-                  <span></span><span></span><span></span>
-                </div>
-                <span id="statusText">Queued</span>
-              </div>
-            </div>
-
-            <div class="meta-strip">
-              <div class="meta-chip">Model: <span id="selectedModel">-</span></div>
-              <div class="meta-chip">Reasoning: <span id="selectedReasoning">-</span></div>
-              <div class="meta-chip">Attempts: <span id="attempts">0 / 3</span></div>
-              <div class="meta-chip">Time: <span id="renderTime">0.0s</span></div>
-            </div>
-
-            <div id="previewStage" class="preview-stage empty">
-              <div id="previewPlaceholder">Waiting for animation…</div>
-              <video id="videoPlayer" controls class="hidden"></video>
-            </div>
-
-            <div id="errorBanner" class="error-banner"></div>
-
-            <div id="detailsStack" class="details-stack hidden">
-              <details id="codePanel" hidden>
-                <summary>Generated Code</summary>
-                <pre><code id="codeBlock" class="language-python"></code></pre>
-              </details>
+        <div class="composer-wrap">
+          <div class="composer">
+            <div class="composer-inner">
+              <textarea
+                id="composerInput"
+                class="composer-input"
+                rows="1"
+                placeholder="Describe a math concept to animate…"
+              ></textarea>
+              <button id="sendBtn" class="send-btn" type="button" aria-label="Send prompt">
+                <svg class="send-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M5 12H18" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                  <path d="M12 6L18 12L12 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                <span class="spinner" aria-hidden="true"></span>
+              </button>
             </div>
           </div>
         </div>
-      </section>
-
-      <section class="result-composer">
-        <section class="composer" aria-label="Prompt composer">
-          <textarea
-            id="followupPrompt"
-            class="composer-textarea"
-            placeholder="Show how the quadratic formula works"
-          ></textarea>
-          <div class="composer-footer">
-            <div class="assistive-row"></div>
-            <div class="composer-actions">
-              <button id="followupBtn" class="submit-btn">Generate</button>
-            </div>
-          </div>
-        </section>
-      </section>
+      </div>
     </main>
   </div>
 
@@ -636,37 +670,31 @@
       videoUrl: "",
     };
 
-    const els = {
-      landingView: document.getElementById("landingView"),
-      resultView: document.getElementById("resultView"),
-      prompt: document.getElementById("prompt"),
-      followupPrompt: document.getElementById("followupPrompt"),
-      provider: document.getElementById("provider"),
-      quality: document.getElementById("quality"),
-      providerHint: document.getElementById("providerHint"),
-      generateBtn: document.getElementById("generateBtn"),
-      followupBtn: document.getElementById("followupBtn"),
-      resultPrompt: document.getElementById("resultPrompt"),
-      statusPill: document.getElementById("statusPill"),
-      statusText: document.getElementById("statusText"),
-      selectedModel: document.getElementById("selectedModel"),
-      selectedReasoning: document.getElementById("selectedReasoning"),
-      attempts: document.getElementById("attempts"),
-      renderTime: document.getElementById("renderTime"),
-      previewStage: document.getElementById("previewStage"),
-      previewPlaceholder: document.getElementById("previewPlaceholder"),
-      videoPlayer: document.getElementById("videoPlayer"),
-      errorBanner: document.getElementById("errorBanner"),
-      detailsStack: document.getElementById("detailsStack"),
-      codePanel: document.getElementById("codePanel"),
-      codeBlock: document.getElementById("codeBlock"),
+    const activeAssistantRefs = {
+      statusEl: null,
+      metaEl: null,
+      stageEl: null,
+      errorEl: null,
+      codeEl: null,
+      codeDetailsEl: null,
+      codeWrapperEl: null,
     };
+
+    const composerInput = document.getElementById("composerInput");
+    const sendBtn = document.getElementById("sendBtn");
+    const providerEl = document.getElementById("provider");
+    const qualityEl = document.getElementById("quality");
+    const providerHintEl = document.getElementById("providerHint");
+    const threadEl = document.getElementById("thread");
+    const threadWrapEl = document.getElementById("threadWrap");
+    const threadEmptyEl = document.getElementById("threadEmpty");
+    const newAnimationBtn = document.getElementById("newAnimationBtn");
 
     const statusLabels = {
       idle: "Idle",
       queued: "Queued",
-      generating: "Generating",
-      rendering: "Rendering",
+      generating: "Generating…",
+      rendering: "Rendering…",
       done: "Done",
       failed: "Failed",
     };
@@ -685,98 +713,274 @@
         .join("\n");
     }
 
-    function setMode(mode) {
-      state.mode = mode;
-      els.landingView.classList.toggle("active", mode === "landing");
-      els.resultView.classList.toggle("active", mode === "result");
+    function scrollThreadToBottom() {
+      requestAnimationFrame(() => {
+        threadWrapEl.scrollTop = threadWrapEl.scrollHeight;
+      });
     }
 
-    function updateStatus(status) {
-      state.status = status;
-      const label = statusLabels[status] || status;
-      els.statusText.textContent = label;
-      els.statusPill.classList.toggle("done", status === "done");
-      els.statusPill.classList.toggle("failed", status === "failed");
+    function autoResize(textarea) {
+      textarea.style.height = "auto";
+      textarea.style.height = `${Math.min(textarea.scrollHeight, 200)}px`;
     }
 
-    function syncPromptFields(activeValue) {
-      els.prompt.value = activeValue;
-      els.followupPrompt.value = activeValue;
+    function escapeHtml(value) {
+      return value
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;");
+    }
+
+    function setThreadEmptyState() {
+      threadEmptyEl.classList.toggle("hidden", threadEl.children.length > 0);
     }
 
     function setBusy(isBusy) {
-      els.generateBtn.disabled = isBusy;
-      els.followupBtn.disabled = isBusy;
-      els.provider.disabled = isBusy || !state.providers.length;
-      els.quality.disabled = isBusy;
+      sendBtn.disabled = isBusy || !state.providers.length;
+      sendBtn.classList.toggle("loading", isBusy);
+      providerEl.disabled = isBusy || !state.providers.length;
+      qualityEl.disabled = isBusy;
+      composerInput.disabled = false;
     }
 
-    function resetResultState() {
+    function buildMetaChips() {
+      const model = providerEl.value || "-";
+      const quality = qualityLabels[qualityEl.value] || qualityEl.value;
+      return [
+        `model ${model}`,
+        `quality ${quality}`,
+        `attempts ${state.attempts} / 3`,
+        `time ${(state.renderTimeSeconds || 0).toFixed(1)}s`,
+      ];
+    }
+
+    function renderMetaRow(metaEl) {
+      metaEl.innerHTML = "";
+      buildMetaChips().forEach((label) => {
+        const chip = document.createElement("span");
+        chip.className = "meta-chip";
+        chip.textContent = label;
+        metaEl.appendChild(chip);
+      });
+    }
+
+    function appendUserBubble(prompt) {
+      const row = document.createElement("div");
+      row.className = "message-row user";
+
+      const bubble = document.createElement("div");
+      bubble.className = "user-bubble";
+      bubble.textContent = prompt;
+
+      row.appendChild(bubble);
+      threadEl.appendChild(row);
+      setThreadEmptyState();
+      scrollThreadToBottom();
+    }
+
+    function createStatusLine(status) {
+      const line = document.createElement("div");
+      line.className = "status-line";
+
+      const pulse = document.createElement("span");
+      pulse.className = "status-pulse";
+      pulse.innerHTML = "<span></span><span></span><span></span>";
+      if (status === "done" || status === "failed") {
+        pulse.classList.add("hidden");
+      }
+
+      const label = document.createElement("span");
+      label.textContent = statusLabels[status] || status;
+
+      line.appendChild(pulse);
+      line.appendChild(label);
+
+      return { line, pulse, label };
+    }
+
+    function appendAssistantBubble() {
+      const row = document.createElement("div");
+      row.className = "message-row assistant";
+
+      const shell = document.createElement("div");
+      shell.className = "assistant-shell";
+
+      const avatar = document.createElement("div");
+      avatar.className = "assistant-avatar";
+      avatar.textContent = "M";
+
+      const bubble = document.createElement("div");
+      bubble.className = "assistant-bubble";
+
+      const status = createStatusLine("queued");
+      const meta = document.createElement("div");
+      meta.className = "meta-row";
+
+      const stage = document.createElement("div");
+      stage.className = "preview-card placeholder";
+      stage.textContent = "Preparing animation…";
+
+      const error = document.createElement("div");
+      error.className = "inline-error";
+
+      const detailsWrap = document.createElement("div");
+      detailsWrap.className = "assistant-details hidden";
+
+      const details = document.createElement("details");
+      details.hidden = true;
+
+      const summary = document.createElement("summary");
+      summary.textContent = "Generated Code";
+
+      const pre = document.createElement("pre");
+      const code = document.createElement("code");
+      code.className = "language-python";
+      pre.appendChild(code);
+      details.appendChild(summary);
+      details.appendChild(pre);
+      detailsWrap.appendChild(details);
+
+      bubble.appendChild(status.line);
+      bubble.appendChild(meta);
+      bubble.appendChild(stage);
+      bubble.appendChild(error);
+      bubble.appendChild(detailsWrap);
+
+      shell.appendChild(avatar);
+      shell.appendChild(bubble);
+      row.appendChild(shell);
+      threadEl.appendChild(row);
+
+      setThreadEmptyState();
+      scrollThreadToBottom();
+
+      return {
+        statusEl: status.label,
+        pulseEl: status.pulse,
+        metaEl: meta,
+        stageEl: stage,
+        errorEl: error,
+        codeEl: code,
+        codeDetailsEl: details,
+        codeWrapperEl: detailsWrap,
+      };
+    }
+
+    function resetAssistantRefs() {
+      activeAssistantRefs.statusEl = null;
+      activeAssistantRefs.pulseEl = null;
+      activeAssistantRefs.metaEl = null;
+      activeAssistantRefs.stageEl = null;
+      activeAssistantRefs.errorEl = null;
+      activeAssistantRefs.codeEl = null;
+      activeAssistantRefs.codeDetailsEl = null;
+      activeAssistantRefs.codeWrapperEl = null;
+    }
+
+    function resetStateForRun(prompt) {
+      state.currentPrompt = prompt;
       state.activeJobId = null;
+      state.status = "queued";
       state.attempts = 0;
       state.renderTimeSeconds = 0;
       state.errorMessage = "";
       state.manimCode = "";
       state.videoUrl = "";
-
-      els.attempts.textContent = "0 / 3";
-      els.renderTime.textContent = "0.0s";
-      els.errorBanner.style.display = "none";
-      els.errorBanner.textContent = "";
-      els.videoPlayer.pause();
-      els.videoPlayer.removeAttribute("src");
-      els.videoPlayer.load();
-      els.videoPlayer.classList.add("hidden");
-      els.previewStage.classList.add("empty");
-      els.previewPlaceholder.textContent = "Waiting for animation…";
-      els.previewPlaceholder.classList.remove("hidden");
-      els.detailsStack.classList.add("hidden");
-      els.codePanel.hidden = true;
-      els.codeBlock.textContent = "";
+      state.mode = "result";
     }
 
-    function renderState() {
-      els.selectedModel.textContent = els.provider.value || "-";
-      els.selectedReasoning.textContent = qualityLabels[els.quality.value] || els.quality.value;
-      els.attempts.textContent = `${state.attempts} / 3`;
-      els.renderTime.textContent = `${(state.renderTimeSeconds || 0).toFixed(1)}s`;
-      els.resultPrompt.textContent = state.currentPrompt;
-
-      if (state.manimCode) {
-        els.codeBlock.textContent = state.manimCode;
-        hljs.highlightElement(els.codeBlock);
-        els.detailsStack.classList.remove("hidden");
-        els.codePanel.hidden = false;
+    function renderAssistantState(data = {}) {
+      if (!activeAssistantRefs.statusEl) {
+        return;
       }
 
+      if (typeof data.status === "string") {
+        state.status = data.status;
+      }
+
+      state.attempts = data.attempts ?? state.attempts;
+      state.renderTimeSeconds = data.render_time_seconds ?? state.renderTimeSeconds;
+      state.errorMessage = data.error_message ?? state.errorMessage;
+      state.manimCode = data.manim_code ?? state.manimCode;
+      state.videoUrl = data.video_url ?? state.videoUrl;
+
+      activeAssistantRefs.statusEl.textContent = statusLabels[state.status] || state.status;
+      activeAssistantRefs.pulseEl.classList.toggle("hidden", state.status === "done" || state.status === "failed");
+      renderMetaRow(activeAssistantRefs.metaEl);
+
       if (state.videoUrl) {
-        els.videoPlayer.src = state.videoUrl;
-        els.videoPlayer.classList.remove("hidden");
-        els.previewStage.classList.remove("empty");
-        els.previewPlaceholder.classList.add("hidden");
+        activeAssistantRefs.stageEl.className = "preview-card";
+        activeAssistantRefs.stageEl.innerHTML = "";
+
+        const video = document.createElement("video");
+        video.src = state.videoUrl || `/api/video/${state.activeJobId}`;
+        video.controls = true;
+        video.autoplay = true;
+        video.muted = true;
+        video.playsInline = true;
+        activeAssistantRefs.stageEl.appendChild(video);
+      } else if (state.status === "failed") {
+        activeAssistantRefs.stageEl.className = "preview-card placeholder";
+        activeAssistantRefs.stageEl.textContent = "Animation unavailable";
+      } else if (state.status === "rendering") {
+        activeAssistantRefs.stageEl.className = "preview-card placeholder";
+        activeAssistantRefs.stageEl.textContent = "Rendering preview…";
+      } else if (state.status === "generating") {
+        activeAssistantRefs.stageEl.className = "preview-card placeholder";
+        activeAssistantRefs.stageEl.textContent = "Generating scene…";
       }
 
       if (state.errorMessage) {
-        els.errorBanner.style.display = "block";
-        els.errorBanner.textContent = truncateError(state.errorMessage);
+        activeAssistantRefs.errorEl.style.display = "block";
+        activeAssistantRefs.errorEl.textContent = truncateError(state.errorMessage);
+      } else {
+        activeAssistantRefs.errorEl.style.display = "none";
+        activeAssistantRefs.errorEl.textContent = "";
       }
+
+      if (state.manimCode) {
+        activeAssistantRefs.codeWrapperEl.classList.remove("hidden");
+        activeAssistantRefs.codeDetailsEl.hidden = false;
+        activeAssistantRefs.codeEl.textContent = state.manimCode;
+        hljs.highlightElement(activeAssistantRefs.codeEl);
+      }
+
+      scrollThreadToBottom();
+    }
+
+    function clearThread() {
+      threadEl.innerHTML = "";
+      resetAssistantRefs();
+      state.currentPrompt = "";
+      state.activeJobId = null;
+      state.status = "idle";
+      state.attempts = 0;
+      state.renderTimeSeconds = 0;
+      state.errorMessage = "";
+      state.manimCode = "";
+      state.videoUrl = "";
+      state.mode = "landing";
+      composerInput.value = "";
+      autoResize(composerInput);
+      setThreadEmptyState();
+      composerInput.focus();
     }
 
     async function loadProviders() {
       const response = await fetch("/api/providers");
       const data = await response.json();
+
       state.providers = data.providers || [];
-      els.provider.innerHTML = "";
+      providerEl.innerHTML = "";
 
       if (!state.providers.length) {
         const option = document.createElement("option");
         option.value = "";
         option.textContent = "No models";
-        els.provider.appendChild(option);
-        els.provider.disabled = true;
-        els.generateBtn.disabled = true;
-        els.followupBtn.disabled = true;
-        els.providerHint.textContent = "No providers configured";
+        providerEl.appendChild(option);
+        providerEl.disabled = true;
+        sendBtn.disabled = true;
+        providerHintEl.textContent = "No providers configured";
         return;
       }
 
@@ -784,14 +988,12 @@
         const option = document.createElement("option");
         option.value = provider;
         option.textContent = provider;
-        els.provider.appendChild(option);
+        providerEl.appendChild(option);
       });
 
-      els.provider.disabled = false;
-      els.generateBtn.disabled = false;
-      els.followupBtn.disabled = false;
-      els.providerHint.textContent = `${state.providers.length} model${state.providers.length > 1 ? "s" : ""}`;
-      renderState();
+      providerEl.disabled = false;
+      sendBtn.disabled = false;
+      providerHintEl.textContent = `${state.providers.length} model${state.providers.length > 1 ? "s" : ""} available`;
     }
 
     async function pollStatus(jobId) {
@@ -799,19 +1001,10 @@
         const response = await fetch(`/api/status/${jobId}`);
         const data = await response.json();
 
-        updateStatus(data.status);
-        state.attempts = data.attempts || 0;
-        state.renderTimeSeconds = data.render_time_seconds || 0;
-        state.errorMessage = data.error_message || "";
-        state.manimCode = data.manim_code || "";
-        state.videoUrl = data.video_url || "";
-        renderState();
+        renderAssistantState(data);
 
         if (data.status === "failed" || data.status === "done") {
           setBusy(false);
-          if (data.status === "done") {
-            els.followupPrompt.focus();
-          }
           return;
         }
 
@@ -819,79 +1012,87 @@
       }
     }
 
-    async function submitPrompt(prompt) {
-      const trimmedPrompt = prompt.trim();
-      if (trimmedPrompt.length < 10) {
-        els.errorBanner.style.display = "block";
-        els.errorBanner.textContent = "Prompt must be at least 10 characters.";
-        setMode("result");
-        state.currentPrompt = trimmedPrompt || " ";
-        resetResultState();
-        updateStatus("failed");
-        renderState();
+    async function submitPrompt() {
+      const prompt = composerInput.value.trim();
+      if (prompt.length < 10) {
+        if (!activeAssistantRefs.errorEl) {
+          appendUserBubble(prompt || " ");
+          Object.assign(activeAssistantRefs, appendAssistantBubble());
+        }
+        state.errorMessage = "Prompt must be at least 10 characters.";
+        state.status = "failed";
+        renderAssistantState({ status: "failed", error_message: state.errorMessage });
         return;
       }
 
-      state.currentPrompt = trimmedPrompt;
-      syncPromptFields(trimmedPrompt);
-      setMode("result");
-      resetResultState();
-      updateStatus("queued");
-      renderState();
+      appendUserBubble(prompt);
+      resetStateForRun(prompt);
+      Object.assign(activeAssistantRefs, appendAssistantBubble());
+      renderAssistantState({ status: "queued" });
       setBusy(true);
 
       const response = await fetch("/api/generate-async", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          prompt: trimmedPrompt,
-          provider: els.provider.value || null,
-          quality: els.quality.value,
+          prompt,
+          provider: providerEl.value || null,
+          quality: qualityEl.value,
         }),
       });
 
       if (!response.ok) {
         const message = await response.text();
-        updateStatus("failed");
-        state.errorMessage = message;
-        renderState();
+        renderAssistantState({
+          status: "failed",
+          error_message: message,
+        });
         setBusy(false);
         return;
       }
 
+      composerInput.value = "";
+      autoResize(composerInput);
+
       const job = await response.json();
       state.activeJobId = job.job_id;
-      updateStatus(job.status || "queued");
-      renderState();
+      renderAssistantState({ status: job.status || "queued" });
       await pollStatus(job.job_id);
     }
 
-    function bindComposer(textarea, button) {
-      button.addEventListener("click", async () => {
-        await submitPrompt(textarea.value);
-      });
+    sendBtn.addEventListener("click", async () => {
+      await submitPrompt();
+    });
 
-      textarea.addEventListener("keydown", async (event) => {
-        if (event.key === "Enter" && !event.shiftKey) {
-          event.preventDefault();
-          await submitPrompt(textarea.value);
-        }
-      });
-    }
+    composerInput.addEventListener("input", () => {
+      autoResize(composerInput);
+    });
 
-    bindComposer(els.prompt, els.generateBtn);
-    bindComposer(els.followupPrompt, els.followupBtn);
+    composerInput.addEventListener("keydown", async (event) => {
+      if (event.key === "Enter" && !event.shiftKey) {
+        event.preventDefault();
+        await submitPrompt();
+      }
+    });
+
+    newAnimationBtn.addEventListener("click", () => {
+      clearThread();
+    });
 
     loadProviders().catch((error) => {
-      els.providerHint.textContent = "Failed to load models";
-      setMode("result");
-      state.currentPrompt = "";
-      resetResultState();
-      updateStatus("failed");
-      state.errorMessage = error.message;
-      renderState();
+      providerHintEl.textContent = "Failed to load models";
+      appendUserBubble(" ");
+      Object.assign(activeAssistantRefs, appendAssistantBubble());
+      renderAssistantState({
+        status: "failed",
+        error_message: error.message,
+      });
       setBusy(false);
     });
+
+    autoResize(composerInput);
+    setThreadEmptyState();
+    composerInput.focus();
   </script>
 </body>
 </html>
